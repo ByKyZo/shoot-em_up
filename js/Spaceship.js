@@ -85,7 +85,7 @@ class Spaceship {
         if (this.state.isMoveLeft && checkCollisionLeftX) {
             this.props.x -= this.config.speed;
         }
-        if (this.state.isFire && checkCollisionLeftX) {
+        if (this.state.isFire) {
             this.fire();
         }
     }
