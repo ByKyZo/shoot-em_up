@@ -5,8 +5,8 @@ class Spaceship {
      *
      */
     config = {
-        speed: 8,
-        missileSpeed: 12,
+        speed: 5,
+        missileSpeed: 8,
         fireCooldown: 100,
     };
     /**
@@ -25,7 +25,6 @@ class Spaceship {
         height: 30,
         missileWidth: 4,
         missileHeight: 24,
-        state: [],
         missiles: [],
         currentFireCooldown: 0,
     };
@@ -63,15 +62,12 @@ class Spaceship {
      * - Gere les differents etats (avancer : en haut / a droite / en bas / a gauche , et le tire) du vaisseau en fonction des touches préssées
      *
      */
-    run() {
-        this.handleMove();
+    render() {
+        this.handleCommand();
         this.drawSpaceship();
-        this.updateDimension();
-        this.drawMissile();
-        this.updateMissileDimension();
     }
 
-    handleMove() {
+    handleCommand() {
         const checkCollisionTopY = this.props.y - this.config.speed > 0;
         const checkCollisionRightX =
             this.props.x + this.config.speed + this.props.width < window.innerWidth;
@@ -92,15 +88,9 @@ class Spaceship {
             this.props.x -= this.config.speed;
         }
         if (this.state.isFire) {
-            this.fire();
+            this.makeMissile();
         }
-    }
-
-    updateDimension() {
-        this.props.top = this.props.y;
-        this.props.right = this.props.x;
-        this.props.bottom = this.props.y + this.props.height;
-        this.props.left = this.props.x + this.props.width;
+        this.updateDimension();
     }
 
     handleListener() {
@@ -127,7 +117,39 @@ class Spaceship {
         window.addEventListener('keyup', handleState);
     }
 
-    fire() {
+    updateDimension() {
+        this.props.top = this.props.y;
+        this.props.right = this.props.x;
+        this.props.bottom = this.props.y + this.props.height;
+        this.props.left = this.props.x + this.props.width;
+    }
+
+    updateMissileDimension() {
+        this.props.missiles.forEach((missile) => {
+            missile.top = missile.y;
+            missile.right = missile.x + missile.width;
+            missile.bottom = missile.y + missile.height;
+            missile.left = missile.x;
+            // console.log(missile);
+        });
+    }
+
+    drawSpaceship(callback) {
+        context.fillStyle = 'blue';
+        context.fillRect(this.props.x, this.props.y, this.props.width, this.props.height);
+        // callback()
+    }
+
+    setMissileCooldown() {
+        if (!this.state.isFireCooldownEnd) {
+            setTimeout(() => {
+                console.log('fire cooldown end');
+                this.state.isFireCooldownEnd = true;
+            }, this.config.fireCooldown);
+        }
+    }
+
+    makeMissile() {
         if (this.state.isFireCooldownEnd) {
             const missileX = this.props.x + this.props.width / 2 - this.props.missileWidth / 2;
             const missileY = this.props.y - this.props.missileHeight;
@@ -144,205 +166,47 @@ class Spaceship {
             });
 
             this.state.isFireCooldownEnd = false;
-            this.setFireCooldown();
+            this.setMissileCooldown();
         }
     }
 
-    updateMissileDimension() {
-        this.props.missiles.forEach((missile) => {
-            missile.top = missile.y;
-            missile.right = missile.x + missile.width;
-            missile.bottom = missile.y + missile.height;
-            missile.left = missile.x;
-            // console.log(missile);
-        });
+    destroyMissile(missileIndex) {
+        this.props.missiles.splice(missileIndex, 1);
     }
 
-    setFireCooldown() {
-        if (!this.state.isFireCooldownEnd) {
-            setTimeout(() => {
-                console.log('fire cooldown end');
-                this.state.isFireCooldownEnd = true;
-            }, this.config.fireCooldown);
+    moveMissile(i) {
+        if (!this.props.missiles[i]) return;
+
+        const missileOutOfMap = this.props.missiles[i].y + this.props.missiles[i].height < 0;
+
+        if (missileOutOfMap) {
+            this.destroyMissile(i);
+            // this.props.missiles.splice(i, 1);
+        } else {
+            this.props.missiles[i].y -= this.config.missileSpeed;
+            this.updateMissileDimension();
         }
     }
 
-    drawSpaceship() {
-        context.fillStyle = 'blue';
-        context.fillRect(this.props.x, this.props.y, this.props.width, this.props.height);
-    }
-
-    drawMissile() {
-        const missileOutOfMapIndexes = [];
-
-        this.props.missiles.forEach((missile, index) => {
-            context.fillStyle = 'white';
-            context.fillRect(missile.x, missile.y, missile.width, missile.height);
-
-            const missileOutOfMap = missile.y - this.config.missileSpeed < 0;
-            // retire l'element du tableau (missile en dehors de la carte)
-            if (missileOutOfMap) {
-                missileOutOfMapIndexes.push(index);
+    drawMissile(callback) {
+        for (let i = 0; i < this.props.missiles.length; i++) {
+            if (!this.props.missiles[i]) {
+                continue;
             }
 
-            missile.y -= this.config.missileSpeed;
-        });
+            context.fillStyle = 'white';
+            context.fillRect(
+                this.props.missiles[i].x,
+                this.props.missiles[i].y,
+                this.props.missiles[i].width,
+                this.props.missiles[i].height
+            );
 
-        missileOutOfMapIndexes.forEach((index) => {
-            this.props.missiles.splice(index, 1);
-        });
+            callback(this.props.missiles[i], i);
 
-        // console.log('missile count : ', this.props.missiles.length);
+            this.moveMissile(i);
+        }
+
+        console.log('missile count : ', this.props.missiles.length);
     }
 }
-// class Spaceship {
-//     config = {
-//         speed: 6,
-//         missileSpeed: 12,
-//     };
-//     props = {
-//         x: null,
-//         y: null,
-//         width: 30,
-//         height: 30,
-//         missileWidth: 6,
-//         missileHeight: 24,
-//         state: [],
-//         missiles: [],
-//     };
-
-//     constructor(x, y) {
-//         this.props.x = x - this.props.width / 2;
-//         this.props.y = y - this.props.height / 2;
-//     }
-
-//     init() {
-//         this.handleListener();
-//     }
-
-//     run() {
-//         this.handleMove();
-//         this.drawSpaceship();
-//         this.drawMissile();
-//     }
-
-//     handleMove() {
-//         const checkCollisionTopY = this.props.y - this.config.speed > 0;
-//         const checkCollisionRightX =
-//             this.props.x + this.config.speed + this.props.width < window.innerWidth;
-//         const checkCollisionBottomY =
-//             this.props.y + this.config.speed + this.props.height < window.innerHeight;
-//         const checkCollisionLeftX = this.props.x - this.config.speed > 0;
-
-//         if (this.props.state.includes('top') && checkCollisionTopY) {
-//             this.props.y -= this.config.speed;
-//         }
-//         if (this.props.state.includes('right') && checkCollisionRightX) {
-//             this.props.x += this.config.speed;
-//         }
-//         if (this.props.state.includes('bottom') && checkCollisionBottomY) {
-//             this.props.y += this.config.speed;
-//         }
-//         if (this.props.state.includes('left') && checkCollisionLeftX) {
-//             this.props.x -= this.config.speed;
-//         }
-//         if (this.props.state.includes('fire') && checkCollisionLeftX) {
-//             // this.props.x -= this.config.speed;
-//             this.fire();
-//         }
-//     }
-
-//     handleListener() {
-//         // todo : remove les events
-//         window.addEventListener('keydown', (e) => {
-//             const topIndex = this.props.state.indexOf('top');
-//             const rightIndex = this.props.state.indexOf('right');
-//             const bottomIndex = this.props.state.indexOf('bottom');
-//             const leftIndex = this.props.state.indexOf('left');
-
-//             const fireIndex = this.props.state.indexOf('fire');
-
-//             if (e.key === 'ArrowUp' && topIndex === -1) {
-//                 this.props.state.push('top');
-//             }
-//             if (e.key === 'ArrowRight' && rightIndex === -1) {
-//                 this.props.state.push('right');
-//             }
-//             if (e.key === 'ArrowDown' && bottomIndex === -1) {
-//                 this.props.state.push('bottom');
-//             }
-//             if (e.key === 'ArrowLeft' && leftIndex === -1) {
-//                 this.props.state.push('left');
-//             }
-//             if (e.key === ' ' && fireIndex === -1) {
-//                 this.props.state.push('fire');
-//                 // this.fire();
-//                 console.log('tire missile sa mere');
-//             }
-//         });
-
-//         window.addEventListener('keyup', (e) => {
-//             const topIndex = this.props.state.indexOf('top');
-//             const rightIndex = this.props.state.indexOf('right');
-//             const bottomIndex = this.props.state.indexOf('bottom');
-//             const leftIndex = this.props.state.indexOf('left');
-
-//             const fireIndex = this.props.state.indexOf('fire');
-
-//             if (e.key === 'ArrowUp' && topIndex !== -1) {
-//                 this.props.state.splice(topIndex, 1);
-//             }
-//             if (e.key === 'ArrowRight' && rightIndex !== -1) {
-//                 this.props.state.splice(rightIndex, 1);
-//             }
-//             if (e.key === 'ArrowDown' && bottomIndex !== -1) {
-//                 this.props.state.splice(bottomIndex, 1);
-//             }
-//             if (e.key === 'ArrowLeft' && leftIndex !== -1) {
-//                 this.props.state.splice(leftIndex, 1);
-//             }
-//             if (e.key === ' ' && fireIndex !== -1) {
-//                 this.props.state.splice(fireIndex, 1);
-//                 this.fire();
-//                 console.log('tire missile sa mere');
-//             }
-//         });
-//     }
-
-//     clearGame() {
-//         context.clearRect(0, 0, window.innerWidth, window.innerHeight);
-//     }
-
-//     fire() {
-//         this.props.missiles.push({
-//             x: this.props.x,
-//             y: this.props.y,
-//             width: this.props.missileWidth,
-//             height: this.props.missileHeight,
-//         });
-//     }
-
-//     drawSpaceship() {
-//         context.fillStyle = 'blue';
-//         context.fillRect(this.props.x, this.props.y, this.props.width, this.props.height);
-//     }
-
-//     drawMissile() {
-//         this.props.missiles.forEach((missile, index) => {
-//             context.fillStyle = 'white';
-//             context.fillRect(
-//                 missile.x + this.props.width / 2 - missile.width / 2,
-//                 missile.y - missile.height,
-//                 missile.width,
-//                 missile.height
-//             );
-
-//             const missileOutOfMap = missile.y - this.config.missileSpeed < 0;
-//             // retire l'element du tableau (missile en dehors de la carte)
-//             if (missileOutOfMap) {
-//                 this.props.missiles.splice(index, 1);
-//             }
-//             missile.y -= this.config.missileSpeed;
-//         });
-//     }
-// }

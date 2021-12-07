@@ -3,13 +3,57 @@ const context = canvas.getContext('2d');
 context.imageSmoothingEnabled = false;
 
 class Main {
+    isStart = true;
+    score = 0;
     enemies = [];
     spaceship = new Spaceship();
+
+    render() {
+        this.spaceship.render();
+        this.renderEnemies();
+        this.checkMissileCollideOnEnemy();
+        this.checkSpaceshipCollideOnEnemy();
+    }
 
     init() {
         this.spaceship = new Spaceship(window.innerWidth / 2, window.innerHeight / 2);
         this.spaceship.init();
         this.initEnemies();
+    }
+
+    checkMissileCollideOnEnemy() {
+        if (this.spaceship.props.missiles.length === 0) return;
+
+        this.spaceship.drawMissile((missile, missileIndex) => {
+            // Gere la collision du missile avec les enemies
+            this.enemies.forEach((enemy, enemyIndex) => {
+                if (
+                    missile.top < enemy.props.bottom &&
+                    missile.right < enemy.props.left &&
+                    missile.bottom > enemy.props.top &&
+                    missile.left > enemy.props.right
+                ) {
+                    this.destroyEnemy(enemyIndex);
+                    this.spaceship.destroyMissile(missileIndex);
+                    this.score++;
+                    console.log('score : ', this.score);
+                }
+            });
+        });
+    }
+
+    checkSpaceshipCollideOnEnemy() {
+        this.enemies.forEach((enemy, index) => {
+            if (
+                this.spaceship.props.top < enemy.props.bottom &&
+                this.spaceship.props.right < enemy.props.left &&
+                this.spaceship.props.bottom > enemy.props.top &&
+                this.spaceship.props.left > enemy.props.right
+            ) {
+                this.isStart = false;
+                console.log('Dead');
+            }
+        });
     }
 
     initEnemies() {
@@ -20,48 +64,12 @@ class Main {
         }, 500);
     }
 
-    checkMissileCollideOnEnemy() {
-        if (this.spaceship.props.missiles.length === 0) return;
-
-        const enemiesKilledIndexes = [];
-
-        this.enemies.forEach((enemy, index) => {
-            this.spaceship.props.missiles.forEach((missile) => {
-                // TODO Check pourquoi les dimensions (top/right/bottom/left)
-                if (
-                    missile.x < enemy.props.x + enemy.props.width &&
-                    missile.x + missile.width > enemy.props.x &&
-                    missile.y < enemy.props.y + enemy.props.height &&
-                    missile.height + missile.y > enemy.props.y
-                ) {
-                    enemiesKilledIndexes.push(index);
-                    console.log('hit');
-                }
-
-                // TODO ça fonctionne mais bizarre
-                // if (
-                //     missile.top < enemy.props.bottom &&
-                //     missile.left > enemy.props.right &&
-                //     missile.bottom > enemy.props.top &&
-                //     missile.right < enemy.props.left
-                // ) {
-                //     enemiesKilledIndexes.push(index);
-                //     console.log('hit');
-                // }
-            });
-        });
-
-        enemiesKilledIndexes.forEach((index) => {
-            this.enemies.splice(index, 1);
-        });
-    }
-
-    runEnemies() {
+    renderEnemies() {
         const enemiesOutOfMapIndex = [];
 
         this.enemies.forEach((enemy, index) => {
-            const enemyOutOfMap = enemy.props.y - enemy.props.height > window.innerHeight;
-            enemy.run();
+            enemy.render();
+            const enemyOutOfMap = enemy.props.y > window.innerHeight;
             if (enemyOutOfMap) {
                 enemiesOutOfMapIndex.push(index);
             }
@@ -72,10 +80,8 @@ class Main {
         });
     }
 
-    run() {
-        this.spaceship.run();
-        this.runEnemies();
-        this.checkMissileCollideOnEnemy();
+    destroyEnemy(enemyIndex) {
+        this.enemies.splice(enemyIndex, 1);
     }
 }
 
@@ -83,9 +89,13 @@ const main = new Main();
 main.init();
 
 const tick = () => {
-    context.clearRect(0, 0, window.innerWidth, window.innerHeight);
-    main.run();
     requestAnimationFrame(tick);
+    if (main.isStart) {
+        context.clearRect(0, 0, window.innerWidth, window.innerHeight);
+        main.render();
+    } else {
+        console.log('end');
+    }
 };
 
 tick();
