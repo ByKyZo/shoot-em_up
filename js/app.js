@@ -27,6 +27,7 @@ class Main {
 
         this.enemies.forEach((enemy, index) => {
             this.spaceship.props.missiles.forEach((missile) => {
+                // TODO Check pourquoi les dimensions (top/right/bottom/left)
                 if (
                     missile.x < enemy.props.x + enemy.props.width &&
                     missile.x + missile.width > enemy.props.x &&
@@ -37,6 +38,7 @@ class Main {
                     console.log('hit');
                 }
 
+                // TODO ça fonctionne mais bizarre
                 // if (
                 //     missile.top < enemy.props.bottom &&
                 //     missile.left > enemy.props.right &&

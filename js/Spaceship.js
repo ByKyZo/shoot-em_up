@@ -65,10 +65,8 @@ class Spaceship {
      */
     run() {
         this.handleMove();
-
         this.drawSpaceship();
         this.updateDimension();
-
         this.drawMissile();
         this.updateMissileDimension();
     }
