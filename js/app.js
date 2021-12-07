@@ -2,38 +2,96 @@ const canvas = document.querySelector('canvas');
 const context = canvas.getContext('2d');
 context.imageSmoothingEnabled = false;
 
-const spaceship = new Spaceship(window.innerWidth / 2, window.innerHeight / 2);
-spaceship.init();
+class Main {
+    enemies = [];
+    spaceship = new Spaceship();
 
-const enemies = [];
+    init() {
+        this.spaceship = new Spaceship(window.innerWidth / 2, window.innerHeight / 2);
+        this.spaceship.init();
+        this.initEnemies();
+    }
 
-setInterval(() => {
-    const enemy = new Enemy();
-    enemy.init();
-    enemies.push(enemy);
-    console.log(enemies.length);
-}, 200);
+    initEnemies() {
+        setInterval(() => {
+            const enemy = new Enemy();
+            enemy.init();
+            this.enemies.push(enemy);
+        }, 500);
+    }
 
-const animate = () => {
+    checkMissileCollideOnEnemy() {
+        if (this.spaceship.props.missiles.length === 0) return;
+
+        const enemiesKilledIndexes = [];
+
+        this.enemies.forEach((enemy, index) => {
+            this.spaceship.props.missiles.forEach((missile) => {
+                if (
+                    missile.x < enemy.props.x + enemy.props.width &&
+                    missile.x + missile.width > enemy.props.x &&
+                    missile.y < enemy.props.y + enemy.props.height &&
+                    missile.height + missile.y > enemy.props.y
+                ) {
+                    enemiesKilledIndexes.push(index);
+                    console.log('hit');
+                }
+
+                // if (
+                //     missile.top < enemy.props.bottom &&
+                //     missile.left > enemy.props.right &&
+                //     missile.bottom > enemy.props.top &&
+                //     missile.right < enemy.props.left
+                // ) {
+                //     enemiesKilledIndexes.push(index);
+                //     console.log('hit');
+                // }
+            });
+        });
+
+        enemiesKilledIndexes.forEach((index) => {
+            this.enemies.splice(index, 1);
+        });
+    }
+
+    runEnemies() {
+        const enemiesOutOfMapIndex = [];
+
+        this.enemies.forEach((enemy, index) => {
+            const enemyOutOfMap = enemy.props.y - enemy.props.height > window.innerHeight;
+            enemy.run();
+            if (enemyOutOfMap) {
+                enemiesOutOfMapIndex.push(index);
+            }
+        });
+
+        enemiesOutOfMapIndex.forEach((index) => {
+            this.enemies.splice(index, 1);
+        });
+    }
+
+    run() {
+        this.spaceship.run();
+        this.runEnemies();
+        this.checkMissileCollideOnEnemy();
+    }
+}
+
+const main = new Main();
+main.init();
+
+const tick = () => {
     context.clearRect(0, 0, window.innerWidth, window.innerHeight);
-    spaceship.run();
-
-    enemies.forEach((enemy, index) => {
-        enemy.run();
-        const enemyOutOfMap = enemy.props.y - enemy.props.height * 4 > window.innerHeight;
-        if (enemyOutOfMap) {
-            enemies.splice(index, 1);
-        }
-    });
-    requestAnimationFrame(animate);
+    main.run();
+    requestAnimationFrame(tick);
 };
 
-animate();
+tick();
 
-// Ajustement de la taille du canvas
+// Ajustement de la taille du canvas en fonction de la taille de la fenetre
 const handleResize = () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth * window.devicePixelRatio;
+    canvas.height = window.innerHeight * window.devicePixelRatio;
 };
 handleResize();
 window.addEventListener('resize', handleResize);

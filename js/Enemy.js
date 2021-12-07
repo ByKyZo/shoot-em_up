@@ -1,14 +1,17 @@
 class Enemy {
     config = {
-        speed: 6,
+        speed: 2,
     };
 
     props = {
         x: null,
         y: null,
+        top: null,
+        right: null,
+        bottom: null,
+        left: null,
         width: 30,
         height: 30,
-        state: [],
     };
 
     random(min, max) {
@@ -20,16 +23,21 @@ class Enemy {
         this.props.y = 0;
     }
 
-    run() {
+    updateDimension() {
+        this.props.top = this.props.y;
+        this.props.right = this.props.x;
+        this.props.bottom = this.props.y + this.props.height;
+        this.props.left = this.props.x + this.props.width;
+    }
+
+    drawEnemy() {
         context.fillStyle = 'red';
         context.fillRect(this.props.x, this.props.y, this.props.width, this.props.height);
+    }
 
-        const enemyOutOfMap = this.props.y + this.config.rocketSpeed > window.innerHeight;
-        // retire l'element du tableau (missile en dehors de la carte)
-        if (enemyOutOfMap) {
-            this.props.missiles.splice(index, 1);
-        }
-
+    run() {
+        this.drawEnemy();
         this.props.y += this.config.speed;
+        this.updateDimension();
     }
 }

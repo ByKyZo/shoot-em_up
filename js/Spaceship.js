@@ -5,9 +5,9 @@ class Spaceship {
      *
      */
     config = {
-        speed: 4,
-        missileSpeed: 8,
-        fireCooldown: 300,
+        speed: 8,
+        missileSpeed: 12,
+        fireCooldown: 100,
     };
     /**
      *
@@ -17,9 +17,13 @@ class Spaceship {
     props = {
         x: null,
         y: null,
+        top: null,
+        right: null,
+        bottom: null,
+        left: null,
         width: 30,
         height: 30,
-        missileWidth: 6,
+        missileWidth: 4,
         missileHeight: 24,
         state: [],
         missiles: [],
@@ -40,8 +44,8 @@ class Spaceship {
     };
 
     constructor(x, y) {
-        this.props.x = x - this.props.width / 2;
-        this.props.y = y - this.props.height / 2;
+        this.props.x = x;
+        this.props.y = y;
     }
     /**
      *
@@ -61,8 +65,12 @@ class Spaceship {
      */
     run() {
         this.handleMove();
+
         this.drawSpaceship();
+        this.updateDimension();
+
         this.drawMissile();
+        this.updateMissileDimension();
     }
 
     handleMove() {
@@ -90,6 +98,13 @@ class Spaceship {
         }
     }
 
+    updateDimension() {
+        this.props.top = this.props.y;
+        this.props.right = this.props.x;
+        this.props.bottom = this.props.y + this.props.height;
+        this.props.left = this.props.x + this.props.width;
+    }
+
     handleListener() {
         // todo : remove les events
         const handleState = (e) => {
@@ -114,22 +129,35 @@ class Spaceship {
         window.addEventListener('keyup', handleState);
     }
 
-    clearGame() {
-        context.clearRect(0, 0, window.innerWidth, window.innerHeight);
-    }
-
     fire() {
         if (this.state.isFireCooldownEnd) {
+            const missileX = this.props.x + this.props.width / 2 - this.props.missileWidth / 2;
+            const missileY = this.props.y - this.props.missileHeight;
+
             this.props.missiles.push({
-                x: this.props.x,
-                y: this.props.y,
+                x: missileX,
+                y: missileY,
                 width: this.props.missileWidth,
                 height: this.props.missileHeight,
+                top: missileY,
+                right: missileX + this.props.missileWidth,
+                bottom: missileY + this.props.missileHeight,
+                left: missileX,
             });
 
             this.state.isFireCooldownEnd = false;
             this.setFireCooldown();
         }
+    }
+
+    updateMissileDimension() {
+        this.props.missiles.forEach((missile) => {
+            missile.top = missile.y;
+            missile.right = missile.x + missile.width;
+            missile.bottom = missile.y + missile.height;
+            missile.left = missile.x;
+            // console.log(missile);
+        });
     }
 
     setFireCooldown() {
@@ -147,22 +175,26 @@ class Spaceship {
     }
 
     drawMissile() {
+        const missileOutOfMapIndexes = [];
+
         this.props.missiles.forEach((missile, index) => {
             context.fillStyle = 'white';
-            context.fillRect(
-                missile.x + this.props.width / 2 - missile.width / 2,
-                missile.y - missile.height,
-                missile.width,
-                missile.height
-            );
+            context.fillRect(missile.x, missile.y, missile.width, missile.height);
 
             const missileOutOfMap = missile.y - this.config.missileSpeed < 0;
             // retire l'element du tableau (missile en dehors de la carte)
             if (missileOutOfMap) {
-                this.props.missiles.splice(index, 1);
+                missileOutOfMapIndexes.push(index);
             }
+
             missile.y -= this.config.missileSpeed;
         });
+
+        missileOutOfMapIndexes.forEach((index) => {
+            this.props.missiles.splice(index, 1);
+        });
+
+        // console.log('missile count : ', this.props.missiles.length);
     }
 }
 // class Spaceship {
