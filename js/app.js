@@ -5,44 +5,42 @@ context.imageSmoothingEnabled = false;
 class Main {
     config = {
         enemy: {
-            min: 6,
-            max: 12,
+            min: 3,
+            max: 8,
+            // min: 1,
+            // max: 1,
             intervalMin: 300,
             intervalMax: 800,
+            // intervalMin: 999999,
+            // intervalMax: 999999,
         },
+        godmode: true,
     };
 
     isStart = true;
     score = 0;
     enemies = [];
     enemyCooldownEnd = true;
-    GOD_MODE = false;
     spaceship = new Spaceship();
 
     render() {
         this.spaceship.render();
         this.spaceship.drawMissile(this.checkMissileCollideOnEnemy.bind(this));
         this.checkSpaceshipCollideOnEnemy();
-        this.initEnemies();
+        this.makeEnemies();
         this.renderEnemies();
     }
 
     init() {
         this.spaceship = new Spaceship(window.innerWidth / 2, window.innerHeight / 2);
         this.spaceship.init();
-        // this.initEnemies();
     }
 
     checkMissileCollideOnEnemy(missile, missileIndex) {
         if (this.spaceship.props.missiles.length === 0) return;
 
         this.enemies.forEach((enemy, enemyIndex) => {
-            if (
-                missile.top < enemy.props.bottom &&
-                missile.right < enemy.props.left &&
-                missile.bottom > enemy.props.top &&
-                missile.left > enemy.props.right
-            ) {
+            if (checkCollision(missile, enemy.props)) {
                 this.destroyEnemy(enemyIndex);
                 this.spaceship.destroyMissile(missileIndex);
                 this.score++;
@@ -52,24 +50,18 @@ class Main {
     }
 
     checkSpaceshipCollideOnEnemy() {
-        if (this.GOD_MODE) return;
+        if (this.config.godmode) return;
         this.enemies.forEach((enemy, index) => {
-            if (
-                this.spaceship.props.top < enemy.props.bottom &&
-                this.spaceship.props.right < enemy.props.left &&
-                this.spaceship.props.bottom > enemy.props.top &&
-                this.spaceship.props.left > enemy.props.right
-            ) {
+            if (checkCollision(this.spaceship.props, enemy.props)) {
                 this.isStart = false;
                 console.log('Dead');
             }
         });
     }
 
-    initEnemies() {
+    makeEnemies() {
         if (!this.enemyCooldownEnd) return;
         const enemyCount = random(this.config.enemy.min, this.config.enemy.max);
-        console.log('enemyCount :', enemyCount);
         for (let i = 0; i < enemyCount; i++) {
             const enemy = new Enemy();
             enemy.init();
@@ -80,26 +72,26 @@ class Main {
     }
 
     setEnemyCooldown() {
-        const enemyInterval = random(this.config.enemy.intervalMin, this.config.enemy.intervalMax);
+        const randomEnemyTimeout = random(
+            this.config.enemy.intervalMin,
+            this.config.enemy.intervalMax
+        );
         setTimeout(() => {
             this.enemyCooldownEnd = true;
-        }, enemyInterval);
+        }, randomEnemyTimeout);
     }
 
     renderEnemies() {
-        const enemiesOutOfMapIndex = [];
-
-        this.enemies.forEach((enemy, index) => {
-            enemy.render();
-            const enemyOutOfMap = enemy.props.y - 200 > window.innerHeight;
-            if (enemyOutOfMap) {
-                enemiesOutOfMapIndex.push(index);
+        for (let i = 0; i < this.enemies.length; i++) {
+            if (!this.enemies[i]) {
+                continue;
             }
-        });
-
-        enemiesOutOfMapIndex.forEach((index) => {
-            this.enemies.splice(index, 1);
-        });
+            this.enemies[i].render();
+            const enemyOutOfMap = this.enemies[i].props.y > window.innerHeight;
+            if (enemyOutOfMap) {
+                this.destroyEnemy(i);
+            }
+        }
     }
 
     destroyEnemy(enemyIndex) {

@@ -5,9 +5,10 @@ class Spaceship {
      *
      */
     config = {
-        speed: 10,
-        missileSpeed: 14,
+        speed: 3,
+        missileSpeed: 6,
         fireCooldown: 200,
+        debug: false,
     };
     /**
      *
@@ -119,9 +120,9 @@ class Spaceship {
 
     updateDimension() {
         this.props.top = this.props.y;
-        this.props.right = this.props.x;
+        this.props.right = this.props.x + this.props.width;
         this.props.bottom = this.props.y + this.props.height;
-        this.props.left = this.props.x + this.props.width;
+        this.props.left = this.props.x;
     }
 
     updateMissileDimension() {
@@ -130,20 +131,27 @@ class Spaceship {
             missile.right = missile.x + missile.width;
             missile.bottom = missile.y + missile.height;
             missile.left = missile.x;
-            // console.log(missile);
         });
     }
 
     drawSpaceship(callback) {
         context.fillStyle = 'blue';
         context.fillRect(this.props.x, this.props.y, this.props.width, this.props.height);
-        // callback()
+
+        if (this.config.debug) {
+            context.fillStyle = '#00ff0050';
+            context.fillRect(
+                this.props.x + this.props.width / 2 - this.props.missileWidth / 2,
+                this.props.y - window.innerHeight,
+                this.props.missileWidth,
+                window.innerHeight
+            );
+        }
     }
 
     setMissileCooldown() {
         if (!this.state.isFireCooldownEnd) {
             setTimeout(() => {
-                console.log('fire cooldown end');
                 this.state.isFireCooldownEnd = true;
             }, this.config.fireCooldown);
         }
@@ -170,10 +178,6 @@ class Spaceship {
         }
     }
 
-    destroyMissile(missileIndex) {
-        this.props.missiles.splice(missileIndex, 1);
-    }
-
     moveMissile(i) {
         if (!this.props.missiles[i]) return;
 
@@ -181,7 +185,6 @@ class Spaceship {
 
         if (missileOutOfMap) {
             this.destroyMissile(i);
-            // this.props.missiles.splice(i, 1);
         } else {
             this.props.missiles[i].y -= this.config.missileSpeed;
             this.updateMissileDimension();
@@ -202,11 +205,14 @@ class Spaceship {
                 this.props.missiles[i].height
             );
 
-            callback(this.props.missiles[i], i);
-
             this.moveMissile(i);
+            callback(this.props.missiles[i], i);
         }
 
-        console.log('missile count : ', this.props.missiles.length);
+        // console.log('missile count : ', this.props.missiles.length);
+    }
+
+    destroyMissile(missileIndex) {
+        this.props.missiles.splice(missileIndex, 1);
     }
 }
