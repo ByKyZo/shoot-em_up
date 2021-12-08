@@ -90,7 +90,7 @@ class Main {
             this.enemies[i].render();
             const enemyOutOfMap = this.enemies[i].props.y > window.innerHeight;
             if (enemyOutOfMap) {
-                // this.destroyEnemy(i);
+                this.destroyEnemy(i);
             }
         }
     }
