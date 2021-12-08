@@ -1,6 +1,8 @@
 class Enemy {
     config = {
-        speed: 2,
+        speedMin: 3,
+        speedMax: 9,
+        speed: 6,
     };
 
     props = {
@@ -15,8 +17,9 @@ class Enemy {
     };
 
     init() {
-        this.props.x = this.random(0, window.innerWidth);
-        this.props.y = 0;
+        this.props.x = random(0, window.innerWidth);
+        this.props.y = 0 - this.props.height;
+        this.config.speed = random(this.config.speedMin, this.config.speedMax);
     }
 
     render() {
@@ -39,9 +42,5 @@ class Enemy {
         this.props.right = this.props.x;
         this.props.bottom = this.props.y + this.props.height;
         this.props.left = this.props.x + this.props.width;
-    }
-
-    random(min, max) {
-        return Math.floor(Math.random() * (max - min + 1) + min);
     }
 }

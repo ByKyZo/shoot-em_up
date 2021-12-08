@@ -5,9 +5,9 @@ class Spaceship {
      *
      */
     config = {
-        speed: 5,
-        missileSpeed: 8,
-        fireCooldown: 100,
+        speed: 10,
+        missileSpeed: 14,
+        fireCooldown: 200,
     };
     /**
      *
