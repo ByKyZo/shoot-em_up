@@ -125,13 +125,11 @@ class Spaceship {
         this.props.left = this.props.x;
     }
 
-    updateMissileDimension() {
-        this.props.missiles.forEach((missile) => {
-            missile.top = missile.y;
-            missile.right = missile.x + missile.width;
-            missile.bottom = missile.y + missile.height;
-            missile.left = missile.x;
-        });
+    updateMissileDimension(i) {
+        this.props.missiles[i].top = this.props.missiles[i].y;
+        this.props.missiles[i].right = this.props.missiles[i].x + this.props.missiles[i].width;
+        this.props.missiles[i].bottom = this.props.missiles[i].y + this.props.missiles[i].height;
+        this.props.missiles[i].left = this.props.missiles[i].x;
     }
 
     drawSpaceship(callback) {
@@ -187,7 +185,7 @@ class Spaceship {
             this.destroyMissile(i);
         } else {
             this.props.missiles[i].y -= this.config.missileSpeed;
-            this.updateMissileDimension();
+            this.updateMissileDimension(i);
         }
     }
 

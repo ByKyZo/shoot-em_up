@@ -2,19 +2,20 @@ const canvas = document.querySelector('canvas');
 const context = canvas.getContext('2d');
 context.imageSmoothingEnabled = false;
 
+// TODO : Gérer le delta time
+// TODO : Faire une class qui gere le spawn des ennemies
+// TODO : Faire une class qui gere les collisions (pour les missiles bonus etc...)
+// TODO : Régler le bug des enemies qui clignonent (hint : quand les enemies sortent de la map -> renderEnemies())
+
 class Main {
     config = {
         enemy: {
             min: 3,
             max: 8,
-            // min: 1,
-            // max: 1,
             intervalMin: 300,
             intervalMax: 800,
-            // intervalMin: 999999,
-            // intervalMax: 999999,
         },
-        godmode: true,
+        godmode: false,
     };
 
     isStart = true;
@@ -89,7 +90,7 @@ class Main {
             this.enemies[i].render();
             const enemyOutOfMap = this.enemies[i].props.y > window.innerHeight;
             if (enemyOutOfMap) {
-                this.destroyEnemy(i);
+                // this.destroyEnemy(i);
             }
         }
     }
