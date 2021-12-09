@@ -5,6 +5,7 @@ const context = canvas.getContext('2d');
 context.imageSmoothingEnabled = false;
 
 // TODO : Gérer le delta time
+// TODO : Déclarer les attributs directement dans le constructor (verifie l'autocompletion dans les autres class)
 // TODO : Faire une class que sera le parent de tout les elements du canvas : class GameObject() -> avec x/y/top/right/bottom/left/draw/update etc...
 // TODO : Faire une class qui gere les collisions (pour les missiles bonus etc...)
 // TODO : Régler le bug des enemies qui clignonent (hint : quand les enemies sortent de la map -> renderEnemies())
