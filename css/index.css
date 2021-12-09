@@ -3,6 +3,7 @@
 
 body {
     margin: 0;
+    overflow: hidden;
 }
 
 canvas {
@@ -10,5 +11,5 @@ canvas {
     top: 0;
     left: 0;
     background: black;
-    display: none;
+    /* display: none; */
 }

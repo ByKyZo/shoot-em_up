@@ -9,6 +9,10 @@
     align-items: center;
     align-content: center;
     flex-direction: column;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
 }
 .boutons {
     display: inline-flex;

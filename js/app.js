@@ -1,9 +1,11 @@
 const canvas = document.querySelector('canvas');
+const home = document.querySelector('#home');
+const gameover = document.querySelector('#gameover');
 const context = canvas.getContext('2d');
 context.imageSmoothingEnabled = false;
 
 // TODO : Gérer le delta time
-// TODO : Faire une class qui gere le spawn des ennemies
+// TODO : Faire une class que sera le parent de tout les elements du canvas : class GameObject() -> avec x/y/top/right/bottom/left/draw/update etc...
 // TODO : Faire une class qui gere les collisions (pour les missiles bonus etc...)
 // TODO : Régler le bug des enemies qui clignonent (hint : quand les enemies sortent de la map -> renderEnemies())
 
@@ -18,85 +20,34 @@ class Main {
         godmode: false,
     };
 
-    isStart = false;
+    isStart = true;
     score = 0;
-    enemies = [];
-    enemyCooldownEnd = true;
     spaceship = new Spaceship();
+    EnemySpawner = new EnemySpawner();
 
     render() {
         this.spaceship.render();
-        this.spaceship.drawMissile(this.checkMissileCollideOnEnemy.bind(this));
-        this.checkSpaceshipCollideOnEnemy();
-        this.makeEnemies();
-        this.renderEnemies();
+        this.spaceship.drawMissile((missile, missileIndex) =>
+            this.EnemySpawner.checkMissileCollideOnEnemy(missile, missileIndex, () => {
+                this.score++;
+                console.log('score : ', this.score);
+            })
+        );
+
+        if (!this.godmode) {
+            this.EnemySpawner.checkSpaceshipCollideOnEnemy(() => {
+                this.isStart = false;
+                console.log('end');
+            });
+        }
+
+        this.EnemySpawner.renderEnemies();
     }
 
     init() {
         this.spaceship = new Spaceship(window.innerWidth / 2, window.innerHeight / 2);
+        this.EnemySpawner = new EnemySpawner(this.spaceship);
         this.spaceship.init();
-    }
-
-    checkMissileCollideOnEnemy(missile, missileIndex) {
-        if (this.spaceship.props.missiles.length === 0) return;
-
-        this.enemies.forEach((enemy, enemyIndex) => {
-            if (checkCollision(missile, enemy.props)) {
-                this.destroyEnemy(enemyIndex);
-                this.spaceship.destroyMissile(missileIndex);
-                this.score++;
-                console.log('score : ', this.score);
-            }
-        });
-    }
-
-    checkSpaceshipCollideOnEnemy() {
-        if (this.config.godmode) return;
-        this.enemies.forEach((enemy, index) => {
-            if (checkCollision(this.spaceship.props, enemy.props)) {
-                this.isStart = false;
-                console.log('Dead');
-            }
-        });
-    }
-
-    makeEnemies() {
-        if (!this.enemyCooldownEnd) return;
-        const enemyCount = random(this.config.enemy.min, this.config.enemy.max);
-        for (let i = 0; i < enemyCount; i++) {
-            const enemy = new Enemy();
-            enemy.init();
-            this.enemies.push(enemy);
-        }
-        this.enemyCooldownEnd = false;
-        this.setEnemyCooldown();
-    }
-
-    setEnemyCooldown() {
-        const randomEnemyTimeout = random(
-            this.config.enemy.intervalMin,
-            this.config.enemy.intervalMax
-        );
-        setTimeout(() => {
-            this.enemyCooldownEnd = true;
-        }, randomEnemyTimeout);
-    }
-
-    renderEnemies() {
-        for (let i = 0; i < this.enemies.length; i++) {
-            if (!this.enemies[i]) {
-                continue;
-            }
-            this.enemies[i].render();
-            const enemyOutOfMap = this.enemies[i].props.y > window.innerHeight;
-            if (enemyOutOfMap) {
-                this.destroyEnemy(i);
-            }
-        }
-    }
-
-    destroyEnemy(enemyIndex) {
-        this.enemies.splice(enemyIndex, 1);
     }
 }
 
@@ -105,6 +56,24 @@ main.init();
 
 const sprite = new Sprite();
 const background = sprite.getStars();
+
+const showHomePage = () => {
+    canvas.style.display = 'none';
+    home.style.display = 'flex';
+    gameover.style.display = 'none';
+};
+const showGameoverPage = () => {
+    canvas.style.display = 'none';
+    home.style.display = 'none';
+    gameover.style.display = 'flex';
+};
+const showGamePage = () => {
+    canvas.style.display = 'flex';
+    home.style.display = 'none';
+    gameover.style.display = 'none';
+};
+
+// showHomePage();
 
 const tick = () => {
     requestAnimationFrame(tick);
@@ -121,7 +90,10 @@ const tick = () => {
         // context.drawImage(background.imgElement, 0, 0, window.innerWidth, window.innerHeight);
         main.render();
     } else {
-        console.log('end');
+        // canvas.style.display = 'none';
+        // home.style.display = 'none';
+        // gameover.style.display = 'flex';
+        // console.log('end');
     }
 };
 

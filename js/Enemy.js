@@ -20,7 +20,7 @@ class Enemy {
         left: null,
     };
 
-    init() {
+    constructor() {
         this.props.x = random(0, window.innerWidth);
         this.props.y = 0 - this.config.height;
         this.config.speed = randomDecimal(this.config.speedMin, this.config.speedMax);

@@ -1,4 +1,5 @@
 class Sprite {
+    // TODO : remove les images du DOM apres le querySelector
     spaceship = {
         imgElement: document.querySelector('#ship-spritesheet'),
         width: function () {
@@ -11,6 +12,11 @@ class Sprite {
 
     missile = {
         imgElement: document.querySelector('#missile-spritesheet'),
+        // imgElement: () => {
+        //     const imgElement = document.querySelector('#missile-spritesheet');
+        //     imgElement.remove();
+        //     return imgElement;
+        // },
         width: function () {
             return this.imgElement.width;
         },
