@@ -18,7 +18,7 @@ class Main {
         godmode: false,
     };
 
-    isStart = true;
+    isStart = false;
     score = 0;
     enemies = [];
     enemyCooldownEnd = true;
@@ -100,44 +100,25 @@ class Main {
     }
 }
 
-const shipSpritesheet = document.querySelector('#ship-spritesheet');
-shipSpritesheet.remove();
-// console.log(shipSpritesheet);
-// requestAnimationFrame(() => {
-//     context.clearRect(0, 0, window.innerWidth, window.innerHeight);
-//     // context.fillStyle = 'blue';
-//     // context.fillRect(100, 100, 100, 100);
-//     const innerXpos = 2;
-//     const innerYpos = 0;
-//     const innerWidth = 12;
-//     const innerHeight = 24;
-//     const posX = 0;
-//     const posY = 0;
-//     // const width = innerWidth * 10;
-//     // const height = innerHeight * 10;
-//     const width = innerWidth;
-//     const height = innerHeight;
-//     // context.drawImage(shipSpritesheet, 2, 0, 12, 24, 0, 0, 12 * 2, 24 * 2);
-//     context.drawImage(
-//         shipSpritesheet,
-//         innerXpos,
-//         innerYpos,
-//         innerWidth,
-//         innerHeight,
-//         posX,
-//         posX,
-//         width,
-//         height
-//     );
-// });
-
 const main = new Main();
 main.init();
+
+const sprite = new Sprite();
+const background = sprite.getStars();
 
 const tick = () => {
     requestAnimationFrame(tick);
     if (main.isStart) {
         context.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+        context.drawImage(
+            background.imgElement,
+            0,
+            0,
+            background.width() * 20,
+            background.height() * 20
+        );
+        // context.drawImage(background.imgElement, 0, 0, window.innerWidth, window.innerHeight);
         main.render();
     } else {
         console.log('end');

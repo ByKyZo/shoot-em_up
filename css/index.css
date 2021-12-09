@@ -1,3 +1,6 @@
+@import url('./home.css');
+@import url('./gameover.css');
+
 body {
     margin: 0;
 }
@@ -7,4 +10,5 @@ canvas {
     top: 0;
     left: 0;
     background: black;
+    display: none;
 }

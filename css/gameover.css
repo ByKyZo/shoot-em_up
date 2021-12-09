@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Doppio+One&family=Epilogue:ital,wght@1,300&family=Expletus+Sans:wght@700&family=Francois+One&family=Fugaz+One&family=Gowun+Dodum&family=Monda:wght@700&family=Orbitron:wght@700&family=Oswald:wght@550;700&family=Share:ital,wght@0,400;1,700&family=Staatliches&family=Zen+Maru+Gothic:wght@300&display=swap');
+
+body {
+    margin: 0;
+    vertical-align: middle;
+    background-image: url(image/background.jpg);
+    background-size: cover;
+    backdrop-filter: blur(8px);
+}
+
+.gameover {
+    font-family: 'Orbitron', sans-serif;
+    display: flex;
+    font-size: 8vw;
+    font-style: oblique;
+    padding: 13px;
+    vertical-align: middle;
+    align-items: center;
+    color: rgb(255, 255, 255);
+    transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    text-shadow: 0 0 5px rgb(195, 195, 195), 0 0 10px rgb(139, 139, 139),
+        0 0 20px rgb(128, 128, 128), 0 0 30px #0ff, 0 0 40px #0ff, 0 0 60px rgb(0, 0, 0),
+        0 0 80px rgb(0, 0, 0), 0 0 100px rgb(0, 0, 0);
+}
+.score {
+    font-family: 'Orbitron', sans-serif;
+    display: flex;
+    font-size: 3vw;
+    font-style: oblique;
+    text-shadow: 0 0 5px rgb(255, 0, 0), 0 0 10px rgb(209, 27, 27), 0 0 20px rgb(255, 0, 0),
+        0 0 40px rgb(255, 0, 0), 0 0 80px rgb(255, 0, 0), 0 0 90px rgb(255, 0, 0),
+        0 0 100px rgb(255, 0, 13), 0 0 150px rgb(255, 0, 34);
+}
+.Restart {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 3vw;
+    font-style: oblique;
+    cursor: pointer;
+    padding: 13px;
+    border: none;
+    color: rgb(255, 255, 255);
+    margin: auto;
+    transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    text-shadow: 0 0 10px rgb(204, 204, 204), 0 0 20px rgb(129, 129, 129),
+        0 0 25px rgb(109, 109, 109), 0 0 30px #00ffff, 0 0 40px #000000, 0 0 60px #000000,
+        0 0 80px #000000;
+    margin: 20px;
+    background: none;
+}
+.Restart:hover {
+    text-shadow: 0 0 10px rgba(255, 255, 255, 1), 0 0 20px rgba(255, 255, 255, 1),
+        0 0 30px rgba(255, 255, 255, 1), 0 0 40px #0059ff, 0 0 70px #0059ff, 0 0 80px #0059ff,
+        0 0 100px #0059ff;
+}
+.quit {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 3vw;
+    font-style: oblique;
+    cursor: pointer;
+    padding: 13px;
+    border: none;
+    color: rgb(255, 255, 255);
+    margin: auto;
+    transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    text-shadow: 0 0 10px rgb(204, 204, 204), 0 0 20px rgb(129, 129, 129),
+        0 0 25px rgb(109, 109, 109), 0 0 30px #00ffff, 0 0 40px #000000, 0 0 60px #000000,
+        0 0 80px #000000;
+    margin: 20px;
+    background: none;
+}
+.quit:hover {
+    text-shadow: 0 0 10px rgba(255, 255, 255, 1), 0 0 20px rgba(255, 255, 255, 1),
+        0 0 30px rgba(255, 255, 255, 1), 0 0 40px #d40000, 0 0 70px #d40000, 0 0 80px #d40000,
+        0 0 100px #d40000;
+}
+
+.boutons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    padding: 20px;
+}
+
+.container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    flex-direction: column;
+}

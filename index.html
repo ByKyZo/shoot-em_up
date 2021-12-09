@@ -5,19 +5,41 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./css/index.css">
     <title>Document</title>
 </head>
 
 <body>
+    <!-- Home -->
+    <div class="background">
+        <div class="titre">SPACE <br> <b>SAINT - LOUIS</b></div>
+        <div class="boutons">
+            <button class="play">JOUER</button>
+        </div>
+    </div>
+    <!-- Home end -->
 
-    <img id="ship-spritesheet" src="./assets/spritesheets/ship.png" alt="">
+    <!-- Gameover -->
+    <!-- <div class="container">
+        <div class="gameover"> GAME OVER </div>
+        <div class="score">Your score : 3556 pts</div>
+        <div class="boutons">
+            <button class="Restart"> RESTART </button>
+            <button class="quit"> QUIT </button>
+        </div>
+    </div> -->
+    <!-- Gameover end -->
+
+    <!-- <img id="ship-spritesheet" src="./assets/spritesheets/ship.png" alt=""> -->
+    <img id="ship-spritesheet" src="./assets/spritesheets/spaceship.svg" alt="">
+    <img id="missile-spritesheet" src="./assets/spritesheets/missile.svg" alt="">
+    <img id="enemy-spritesheet" src="./assets/spritesheets/enemy.svg" alt="">
+    <img id="background" src="./assets/background/background.png" alt="">
+    <img id="stars" src="./assets/background/stars.svg" alt="">
 
     <canvas></canvas>
 
-
-
-
+    <script src="./js/Sprite.js"></script>
     <script src="./js/helpers.js"></script>
     <script src="./js/Spaceship.js"></script>
     <script src="./js/Enemy.js"></script>

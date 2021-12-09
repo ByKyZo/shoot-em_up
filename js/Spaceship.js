@@ -1,13 +1,14 @@
 class Spaceship {
+    sprite = new Sprite();
     /**
      *
      * La configuration du jeu
      *
      */
     config = {
-        speed: 3,
-        missileSpeed: 6,
-        fireCooldown: 200,
+        speed: 6,
+        missileSpeed: 12,
+        fireCooldown: 100,
         debug: false,
     };
     /**
@@ -22,9 +23,9 @@ class Spaceship {
         right: null,
         bottom: null,
         left: null,
-        width: 30,
-        height: 30,
-        missileWidth: 4,
+        width: 100,
+        height: 100,
+        missileWidth: 12,
         missileHeight: 24,
         missiles: [],
         currentFireCooldown: 0,
@@ -133,8 +134,18 @@ class Spaceship {
     }
 
     drawSpaceship(callback) {
-        context.fillStyle = 'blue';
-        context.fillRect(this.props.x, this.props.y, this.props.width, this.props.height);
+        // TODO : A factoriser
+        const spaceshipSprite = this.sprite.getSpaceshipSprite();
+
+        context.drawImage(
+            spaceshipSprite.imgElement,
+            this.props.x,
+            this.props.y,
+            this.props.width,
+            this.props.height
+            // spaceshipSprite.width(),
+            // spaceshipSprite.height()
+        );
 
         if (this.config.debug) {
             context.fillStyle = '#00ff0050';
@@ -195,12 +206,14 @@ class Spaceship {
                 continue;
             }
 
-            context.fillStyle = 'white';
-            context.fillRect(
+            const missileSprite = this.sprite.getMissileSpritesheet();
+
+            context.drawImage(
+                missileSprite.imgElement,
                 this.props.missiles[i].x,
                 this.props.missiles[i].y,
-                this.props.missiles[i].width,
-                this.props.missiles[i].height
+                this.props.missileWidth,
+                this.props.missileHeight
             );
 
             this.moveMissile(i);

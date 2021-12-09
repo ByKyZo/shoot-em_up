@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Doppio+One&family=Epilogue:ital,wght@1,300&family=Expletus+Sans:wght@700&family=Francois+One&family=Fugaz+One&family=Gowun+Dodum&family=Monda:wght@700&family=Orbitron:wght@700&family=Oswald:wght@550;700&family=Share:ital,wght@0,400;1,700&family=Staatliches&family=Zen+Maru+Gothic:wght@300&display=swap');
+
+.background {
+    background-image: url(../assets/background/home_background.png);
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    flex-direction: column;
+}
+.boutons {
+    display: inline-flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+.play {
+    background-color: transparent;
+
+    font-family: 'Orbitron', sans-serif;
+    font-size: 3vw;
+    font-style: oblique;
+    cursor: pointer;
+    padding: 13px;
+    border: solid;
+    border-width: 2px;
+    border-radius: 7px;
+    color: rgb(255, 255, 255);
+    margin: auto;
+    transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 1), 0 0 20px rgba(255, 255, 255, 1),
+        0 0 30px rgba(255, 255, 255, 1), 0 0 40px #00ffff, 0 0 70px #00ffff, 0 0 80px #00ffff,
+        0 0 100px #00ffff;
+    margin: 20px;
+}
+
+.play:hover {
+    text-shadow: 0 0 10px rgba(255, 255, 255, 1), 0 0 20px rgba(255, 255, 255, 1),
+        0 0 30px rgba(255, 255, 255, 1), 0 0 40px #0059ff, 0 0 70px #0059ff, 0 0 80px #0059ff,
+        0 0 100px #0059ff;
+}
+
+.titre {
+    font-size: 7vw;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 1), 0 0 20px rgba(255, 255, 255, 1),
+        0 0 30px rgba(255, 255, 255, 1), 0 0 40px #00ffff, 0 0 70px #00ffff, 0 0 80px #00ffff,
+        0 0 100px #00ffff;
+    font-family: 'Orbitron', sans-serif;
+    text-align: center;
+    margin: 20px;
+}
