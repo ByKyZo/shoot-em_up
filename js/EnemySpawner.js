@@ -3,12 +3,11 @@ class EnemySpawner {
     enemies = [];
     config = {
         enemy: {
-            min: 3,
+            min: 4,
             max: 8,
-            intervalMin: 300,
-            intervalMax: 800,
+            intervalMin: 800,
+            intervalMax: 1000,
         },
-        godmode: false,
     };
     props = {
         enemyCooldownEnd: true,
@@ -34,7 +33,6 @@ class EnemySpawner {
 
     // Todo : rajouter la callback : mettre fin au jeu
     checkSpaceshipCollideOnEnemy(onSpaceshipCollideCallback) {
-        if (this.config.godmode) return;
         this.enemies.forEach((enemy, index) => {
             if (checkCollision(this.spaceship.props, enemy.props)) {
                 onSpaceshipCollideCallback();
@@ -75,6 +73,7 @@ class EnemySpawner {
             }
             this.enemies[i].render();
         }
+        // console.log(this.enemies.length);
     }
 
     renderEnemies() {

@@ -18,7 +18,7 @@ class Main {
             intervalMin: 300,
             intervalMax: 800,
         },
-        godmode: false,
+        godmode: true,
     };
 
     isStart = true;
@@ -28,14 +28,16 @@ class Main {
 
     render() {
         this.spaceship.render();
+
         this.spaceship.drawMissile((missile, missileIndex) =>
             this.EnemySpawner.checkMissileCollideOnEnemy(missile, missileIndex, () => {
                 this.score++;
-                console.log('score : ', this.score);
+                console.log(this.score);
             })
         );
 
-        if (!this.godmode) {
+        if (!this.config.godmode) {
+            console.log('godmode no active');
             this.EnemySpawner.checkSpaceshipCollideOnEnemy(() => {
                 this.isStart = false;
                 console.log('end');
@@ -80,7 +82,6 @@ const tick = () => {
     requestAnimationFrame(tick);
     if (main.isStart) {
         context.clearRect(0, 0, window.innerWidth, window.innerHeight);
-
         context.drawImage(
             background.imgElement,
             0,
@@ -88,7 +89,6 @@ const tick = () => {
             background.width() * 20,
             background.height() * 20
         );
-        // context.drawImage(background.imgElement, 0, 0, window.innerWidth, window.innerHeight);
         main.render();
     } else {
         // canvas.style.display = 'none';

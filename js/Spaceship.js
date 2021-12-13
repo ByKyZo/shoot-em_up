@@ -220,7 +220,7 @@ class Spaceship {
             callback(this.props.missiles[i], i);
         }
 
-        // console.log('missile count : ', this.props.missiles.length);
+        console.log('missile count : ', this.props.missiles.length);
     }
 
     destroyMissile(missileIndex) {

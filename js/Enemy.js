@@ -1,11 +1,10 @@
 class Enemy {
     sprite = new Sprite();
+    enemySprite = this.sprite.getEnemySpritesheet();
 
     config = {
-        // speedMin: 0.001,
-        // speedMax: 0.001,
-        speedMin: 0.5,
-        speedMax: 1,
+        speedMin: 2,
+        speedMax: 2.5,
         speed: null,
         height: 50,
         width: 50,
@@ -36,16 +35,12 @@ class Enemy {
     }
 
     drawEnemy() {
-        const enemySprite = this.sprite.getEnemySpritesheet();
-
         context.drawImage(
-            enemySprite.imgElement,
+            this.enemySprite.imgElement,
             this.props.x,
             this.props.y,
             this.config.width,
             this.config.height
-            // spaceshipSprite.width(),
-            // spaceshipSprite.height()
         );
 
         // context.fillStyle = 'red';
