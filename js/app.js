@@ -12,12 +12,6 @@ context.imageSmoothingEnabled = false;
 
 class Main {
     config = {
-        enemy: {
-            min: 3,
-            max: 8,
-            intervalMin: 300,
-            intervalMax: 800,
-        },
         godmode: true,
     };
 
