@@ -5,11 +5,13 @@ class Spaceship {
      * La configuration du jeu
      *
      */
-    config = {
-        speed: 6,
-        missileSpeed: 12,
-        fireCooldown: 100,
+    configuration = {
+        vitesseVaisseau: 6,
+        vitesseMissile: 12,
+        tempsDeRechargementEntreLesTirs: 100,
         debug: false,
+        largeurDesMissiles: 12,
+        hauteurDesMissiles: 24,
     };
     /**
      *
@@ -25,8 +27,6 @@ class Spaceship {
         left: null,
         width: 100,
         height: 100,
-        missileWidth: 12,
-        missileHeight: 24,
         missiles: [],
         currentFireCooldown: 0,
     };
@@ -70,24 +70,26 @@ class Spaceship {
     }
 
     handleCommand() {
-        const checkCollisionTopY = this.props.y - this.config.speed > 0;
+        const checkCollisionTopY = this.props.y - this.configuration.vitesseVaisseau > 0;
         const checkCollisionRightX =
-            this.props.x + this.config.speed + this.props.width < window.innerWidth;
+            this.props.x + this.configuration.vitesseVaisseau + this.props.width <
+            window.innerWidth;
         const checkCollisionBottomY =
-            this.props.y + this.config.speed + this.props.height < window.innerHeight;
-        const checkCollisionLeftX = this.props.x - this.config.speed > 0;
+            this.props.y + this.configuration.vitesseVaisseau + this.props.height <
+            window.innerHeight;
+        const checkCollisionLeftX = this.props.x - this.configuration.vitesseVaisseau > 0;
 
         if (this.state.isMoveTop && checkCollisionTopY) {
-            this.props.y -= this.config.speed;
+            this.props.y -= this.configuration.vitesseVaisseau;
         }
         if (this.state.isMoveRight && checkCollisionRightX) {
-            this.props.x += this.config.speed;
+            this.props.x += this.configuration.vitesseVaisseau;
         }
         if (this.state.isMoveBottom && checkCollisionBottomY) {
-            this.props.y += this.config.speed;
+            this.props.y += this.configuration.vitesseVaisseau;
         }
         if (this.state.isMoveLeft && checkCollisionLeftX) {
-            this.props.x -= this.config.speed;
+            this.props.x -= this.configuration.vitesseVaisseau;
         }
         if (this.state.isFire) {
             this.makeMissile();
@@ -147,12 +149,12 @@ class Spaceship {
             // spaceshipSprite.height()
         );
 
-        if (this.config.debug) {
+        if (this.configuration.debug) {
             context.fillStyle = '#00ff0050';
             context.fillRect(
-                this.props.x + this.props.width / 2 - this.props.missileWidth / 2,
+                this.props.x + this.props.width / 2 - this.configuration.largeurDesMissiles / 2,
                 this.props.y - window.innerHeight,
-                this.props.missileWidth,
+                this.configuration.largeurDesMissiles,
                 window.innerHeight
             );
         }
@@ -162,23 +164,24 @@ class Spaceship {
         if (!this.state.isFireCooldownEnd) {
             setTimeout(() => {
                 this.state.isFireCooldownEnd = true;
-            }, this.config.fireCooldown);
+            }, this.configuration.tempsDeRechargementEntreLesTirs);
         }
     }
 
     makeMissile() {
         if (this.state.isFireCooldownEnd) {
-            const missileX = this.props.x + this.props.width / 2 - this.props.missileWidth / 2;
-            const missileY = this.props.y - this.props.missileHeight;
+            const missileX =
+                this.props.x + this.props.width / 2 - this.configuration.largeurDesMissiles / 2;
+            const missileY = this.props.y - this.configuration.hauteurDesMissiles;
 
             this.props.missiles.push({
                 x: missileX,
                 y: missileY,
-                width: this.props.missileWidth,
-                height: this.props.missileHeight,
+                width: this.configuration.largeurDesMissiles,
+                height: this.configuration.hauteurDesMissiles,
                 top: missileY,
-                right: missileX + this.props.missileWidth,
-                bottom: missileY + this.props.missileHeight,
+                right: missileX + this.configuration.largeurDesMissiles,
+                bottom: missileY + this.configuration.hauteurDesMissiles,
                 left: missileX,
             });
 
@@ -195,7 +198,7 @@ class Spaceship {
         if (missileOutOfMap) {
             this.destroyMissile(i);
         } else {
-            this.props.missiles[i].y -= this.config.missileSpeed;
+            this.props.missiles[i].y -= this.configuration.vitesseMissile;
             this.updateMissileDimension(i);
         }
     }
@@ -212,8 +215,8 @@ class Spaceship {
                 missileSprite.imgElement,
                 this.props.missiles[i].x,
                 this.props.missiles[i].y,
-                this.props.missileWidth,
-                this.props.missileHeight
+                this.configuration.largeurDesMissiles,
+                this.configuration.hauteurDesMissiles
             );
 
             this.moveMissile(i);

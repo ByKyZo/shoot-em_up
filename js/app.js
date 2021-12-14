@@ -11,15 +11,42 @@ context.imageSmoothingEnabled = false;
 // TODO : Régler le bug des enemies qui clignonent (hint : quand les enemies sortent de la map -> renderEnemies())
 
 class Main {
+    /**
+     *
+     * Configuration du jeu
+     *
+     */
     config = {
-        godmode: true,
+        modeInvincible: true,
     };
-
+    /**
+     *
+     * Propriété du jeu
+     *
+     */
     isStart = true;
     score = 0;
     spaceship = new Spaceship();
     EnemySpawner = new EnemySpawner();
-
+    /**
+     *
+     * Initialise le jeu
+     *  - Initialise le vaisseau
+     *  - Initialise l'apparation des ennemies
+     *
+     */
+    init() {
+        this.spaceship = new Spaceship(window.innerWidth / 2, window.innerHeight / 2);
+        this.EnemySpawner = new EnemySpawner(this.spaceship);
+        this.spaceship.init();
+    }
+    /**
+     *
+     * Fait le rendu du jeu
+     *  - Dessine les missiles et les enemies
+     *  - Dans les fonctions de callback on verifie les collisions (optimisations des boucles)
+     *
+     */
     render() {
         this.spaceship.render();
 
@@ -30,8 +57,8 @@ class Main {
             })
         );
 
-        if (!this.config.godmode) {
-            console.log('godmode no active');
+        if (!this.config.modeInvincible) {
+            console.log('modeInvincible no active');
             this.EnemySpawner.checkSpaceshipCollideOnEnemy(() => {
                 this.isStart = false;
                 console.log('end');
@@ -39,12 +66,6 @@ class Main {
         }
 
         this.EnemySpawner.renderEnemies();
-    }
-
-    init() {
-        this.spaceship = new Spaceship(window.innerWidth / 2, window.innerHeight / 2);
-        this.EnemySpawner = new EnemySpawner(this.spaceship);
-        this.spaceship.init();
     }
 }
 

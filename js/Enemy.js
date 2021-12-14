@@ -2,12 +2,11 @@ class Enemy {
     sprite = new Sprite();
     enemySprite = this.sprite.getEnemySpritesheet();
 
-    config = {
-        speedMin: 2,
-        speedMax: 2.5,
-        speed: null,
-        height: 50,
-        width: 50,
+    configuration = {
+        vitesseMinimumEnnemis: 2,
+        vitesseMaximumEnnemis: 2.5,
+        hauteurEnnemis: 50,
+        largeurEnnemis: 50,
     };
 
     props = {
@@ -17,12 +16,16 @@ class Enemy {
         right: null,
         bottom: null,
         left: null,
+        speed: null,
     };
 
     constructor() {
         this.props.x = random(0, window.innerWidth);
-        this.props.y = 0 - this.config.height;
-        this.config.speed = randomDecimal(this.config.speedMin, this.config.speedMax);
+        this.props.y = 0 - this.configuration.hauteurEnnemis;
+        this.props.speed = randomDecimal(
+            this.configuration.vitesseMinimumEnnemis,
+            this.configuration.vitesseMaximumEnnemis
+        );
     }
 
     render() {
@@ -30,7 +33,7 @@ class Enemy {
     }
 
     moveEnemy() {
-        this.props.y += this.config.speed;
+        this.props.y += this.props.speed;
         this.updateDimension();
     }
 
@@ -39,19 +42,19 @@ class Enemy {
             this.enemySprite.imgElement,
             this.props.x,
             this.props.y,
-            this.config.width,
-            this.config.height
+            this.configuration.largeurEnnemis,
+            this.configuration.hauteurEnnemis
         );
 
         // context.fillStyle = 'red';
-        // context.fillRect(this.props.x, this.props.y, this.config.width, this.config.height);
+        // context.fillRect(this.props.x, this.props.y, this.configuration.largeurEnnemis, this.configuration.hauteurEnnemis);
         this.moveEnemy();
     }
 
     updateDimension() {
         this.props.top = this.props.y;
-        this.props.right = this.props.x + this.config.width;
-        this.props.bottom = this.props.y + this.config.height;
+        this.props.right = this.props.x + this.configuration.largeurEnnemis;
+        this.props.bottom = this.props.y + this.configuration.hauteurEnnemis;
         this.props.left = this.props.x;
     }
 }
