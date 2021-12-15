@@ -14,7 +14,7 @@
     <div id='home' class="background">
         <div class="titre">SPACE <br> <b>SAINT - LOUIS</b></div>
         <div class="boutons">
-            <button class="play">JOUER</button>
+            <button id="play" class="play">PLAY</button>
         </div>
     </div>
     <!-- Home end -->
@@ -22,26 +22,43 @@
     <!-- Gameover -->
     <div id='gameover' class="container">
         <div class="gameover"> GAME OVER </div>
-        <div class="score">Your score : 3556 pts</div>
+        <div class="gameover-score">Your score : <span id="final-score"> 0 </span> pts </div>
         <div class="boutons">
-            <button class="Restart"> RESTART </button>
-            <button class="quit"> QUIT </button>
+            <button id='restart' class="Restart"> RESTART </button>
+            <button id="quit" class="quit"> QUIT </button>
         </div>
     </div>
     <!-- Gameover end -->
 
-    <!-- <img id="ship-spritesheet" src="./assets/spritesheets/ship.png" alt=""> -->
-    <img id="ship-spritesheet" src="./assets/spritesheets/spaceship.svg" alt="">
-    <img id="missile-spritesheet" src="./assets/spritesheets/missile.svg" alt="">
+    <!-- Score -->
+    <div id="score-layout">
+        <div class="elements">
+            <div class="infos">
+                <div class="score">SCORE : <span id="current-score">0</span></div>
+                <div class="score">FPS : <span id="fps">0</span></div>
+            </div>
+            <div class="titre-score">SPACE SAINT - LOUIS</div>
+            <div class="touche">
+                SPACEBAR = SHOT <br>
+                ARROW KEYS = MOVE
+            </div>
+        </div>
+    </div>
+    <!-- Score end -->
+
+    <!-- <img id="ship-spritesheet" src="./assets/spritesheets/spaceship.svg" alt=""> -->
+    <img id="ship-spritesheet" src="./assets/spritesheets/voiture_jaune.svg" alt="">
+    <!-- <img id="missile-spritesheet" src="./assets/spritesheets/missile.svg" alt=""> -->
+    <img id="missile-spritesheet" src="./assets/spritesheets/poisson.svg" alt="">
     <!-- <img id="enemy-spritesheet" src="./assets/spritesheets/enemy.svg" alt=""> -->
     <img id="enemy-spritesheet" src="./assets/spritesheets/Angryvirus.png" alt="">
-    <img id="background" src="./assets/background/background.png" alt="">
     <img id="stars" src="./assets/background/stars.svg" alt="">
 
     <canvas></canvas>
 
-    <script src="./js/Sprite.js"></script>
     <script src="./js/helpers.js"></script>
+    <script src="./js/Clock.js"></script>
+    <script src="./js/Sprite.js"></script>
     <script src="./js/Spaceship.js"></script>
     <script src="./js/Enemy.js"></script>
     <script src="./js/EnemySpawner.js"></script>

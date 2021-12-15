@@ -1,5 +1,6 @@
 @import url('./home.css');
 @import url('./gameover.css');
+@import url('./score.css');
 
 body {
     margin: 0;

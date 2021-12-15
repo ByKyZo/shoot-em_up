@@ -1,56 +1,63 @@
 class Spaceship {
     sprite = new Sprite();
-    /**
-     *
-     * La configuration du jeu
-     *
-     */
-    configuration = {
-        vitesseVaisseau: 6,
-        vitesseMissile: 12,
-        tempsDeRechargementEntreLesTirs: 100,
-        debug: false,
-        largeurDesMissiles: 12,
-        hauteurDesMissiles: 24,
-    };
-    /**
-     *
-     * Les propriétes du vaisseau
-     *
-     */
-    props = {
-        x: null,
-        y: null,
-        top: null,
-        right: null,
-        bottom: null,
-        left: null,
-        width: 100,
-        height: 100,
-        missiles: [],
-        currentFireCooldown: 0,
-    };
-    /**
-     *
-     * Les états du vaisseau
-     *
-     */
-    state = {
-        isFireCooldownEnd: true,
-        isFire: false,
-        isMoveTop: false,
-        isMoveRight: false,
-        isMoveBottom: false,
-        isMoveLeft: false,
-    };
-
-    constructor(x, y) {
-        this.props.x = x;
-        this.props.y = y;
+    constructor(xDefault, yDefault) {
+        /**
+         *
+         * ?La configuration du jeu
+         *
+         */
+        this.configuration = {
+            vitesseVaisseau: 0.5,
+            vitesseMissile: 0.8,
+            tempsDeRechargementEntreLesTirs: 100,
+            debug: false,
+            largeurDesMissiles: 12,
+            hauteurDesMissiles: 24,
+        };
+        /**
+         *
+         * Valeurs par défaut
+         *
+         */
+        this.default = {
+            x: xDefault,
+            y: yDefault,
+        };
+        /**
+         *
+         * Les propriétes du vaisseau
+         *
+         */
+        this.props = {
+            x: xDefault,
+            y: yDefault,
+            top: null,
+            right: null,
+            bottom: null,
+            left: null,
+            width: 100,
+            height: 100,
+            missiles: [],
+            currentFireCooldown: 0,
+        };
+        /**
+         *
+         * Les états du vaisseau
+         *
+         */
+        this.state = {
+            isFireCooldownEnd: true,
+            isFire: false,
+            isMoveTop: false,
+            isMoveRight: false,
+            isMoveBottom: false,
+            isMoveLeft: false,
+        };
     }
     /**
      *
      * Initialisation du vaisseau
+     * A appeler qu'une seule fois
      *
      */
     init() {
@@ -65,11 +72,11 @@ class Spaceship {
      *
      */
     render() {
-        this.handleCommand();
+        this.stateHandler();
         this.drawSpaceship();
     }
 
-    handleCommand() {
+    stateHandler() {
         const checkCollisionTopY = this.props.y - this.configuration.vitesseVaisseau > 0;
         const checkCollisionRightX =
             this.props.x + this.configuration.vitesseVaisseau + this.props.width <
@@ -80,16 +87,16 @@ class Spaceship {
         const checkCollisionLeftX = this.props.x - this.configuration.vitesseVaisseau > 0;
 
         if (this.state.isMoveTop && checkCollisionTopY) {
-            this.props.y -= this.configuration.vitesseVaisseau;
+            this.props.y -= this.configuration.vitesseVaisseau * deltaTime;
         }
         if (this.state.isMoveRight && checkCollisionRightX) {
-            this.props.x += this.configuration.vitesseVaisseau;
+            this.props.x += this.configuration.vitesseVaisseau * deltaTime;
         }
         if (this.state.isMoveBottom && checkCollisionBottomY) {
-            this.props.y += this.configuration.vitesseVaisseau;
+            this.props.y += this.configuration.vitesseVaisseau * deltaTime;
         }
         if (this.state.isMoveLeft && checkCollisionLeftX) {
-            this.props.x -= this.configuration.vitesseVaisseau;
+            this.props.x -= this.configuration.vitesseVaisseau * deltaTime;
         }
         if (this.state.isFire) {
             this.makeMissile();
@@ -198,7 +205,7 @@ class Spaceship {
         if (missileOutOfMap) {
             this.destroyMissile(i);
         } else {
-            this.props.missiles[i].y -= this.configuration.vitesseMissile;
+            this.props.missiles[i].y -= this.configuration.vitesseMissile * deltaTime;
             this.updateMissileDimension(i);
         }
     }
@@ -223,10 +230,17 @@ class Spaceship {
             callback(this.props.missiles[i], i);
         }
 
-        console.log('missile count : ', this.props.missiles.length);
+        // console.log('missile count : ', this.props.missiles.length);
     }
 
     destroyMissile(missileIndex) {
         this.props.missiles.splice(missileIndex, 1);
+    }
+
+    reset() {
+        this.props.x = this.default.x;
+        this.props.y = this.default.y;
+        this.props.missiles = [];
+        this.props.currentFireCooldown = 0;
     }
 }

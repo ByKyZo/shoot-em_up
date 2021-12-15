@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Doppio+One&family=Epilogue:ital,wght@1,300&family=Expletus+Sans:wght@700&family=Francois+One&family=Fugaz+One&family=Gowun+Dodum&family=Monda:wght@700&family=Orbitron:wght@700&family=Oswald:wght@550;700&family=Share:ital,wght@0,400;1,700&family=Staatliches&family=Zen+Maru+Gothic:wght@300&display=swap');
+
+body {
+    margin: 0;
+}
+
+#score-layout {
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100%;
+}
+
+.infos {
+    position: fixed;
+    left: 0;
+    top: 0;
+}
+
+.score {
+    font-family: 'Orbitron', sans-serif;
+    font-style: oblique;
+    color: azure;
+    font-size: 20px;
+    padding: 15px;
+    text-shadow: 0 0 1px rgba(255, 255, 255, 1), 0 0 5px rgba(255, 255, 255, 1),
+        0 0 10px rgba(255, 255, 255, 1), 0 0 30px #00ffff, 0 0 40px #00ffff, 0 0 50px #00ffff,
+        0 0 70px #00ffff;
+}
+
+.touche {
+    color: white;
+    opacity: 25%;
+    flex-direction: column;
+    font-size: 20px;
+    font-family: 'Orbitron', sans-serif;
+    text-align: right;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    padding: 10px;
+}
+
+.titre-score {
+    position: fixed;
+    right: 0;
+    top: 0;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 1), 0 0 20px rgba(255, 255, 255, 1),
+        0 0 30px rgba(255, 255, 255, 1), 0 0 40px #00ffff, 0 0 70px #00ffff, 0 0 80px #00ffff,
+        0 0 100px #00ffff;
+    font-family: 'Orbitron', sans-serif;
+    bottom: 0;
+    padding: 10px;
+    color: white;
+}
+
+.elements {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+}

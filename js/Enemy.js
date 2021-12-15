@@ -2,30 +2,35 @@ class Enemy {
     sprite = new Sprite();
     enemySprite = this.sprite.getEnemySpritesheet();
 
-    configuration = {
-        vitesseMinimumEnnemis: 2,
-        vitesseMaximumEnnemis: 2.5,
-        hauteurEnnemis: 50,
-        largeurEnnemis: 50,
-    };
-
-    props = {
-        x: null,
-        y: null,
-        top: null,
-        right: null,
-        bottom: null,
-        left: null,
-        speed: null,
-    };
-
     constructor() {
-        this.props.x = random(0, window.innerWidth);
-        this.props.y = 0 - this.configuration.hauteurEnnemis;
-        this.props.speed = randomDecimal(
-            this.configuration.vitesseMinimumEnnemis,
-            this.configuration.vitesseMaximumEnnemis
-        );
+        /**
+         *
+         * La configuration d'un ennemi
+         *
+         */
+        this.configuration = {
+            vitesseMinimumEnnemis: 0.06,
+            vitesseMaximumEnnemis: 0.08,
+            hauteurEnnemis: 50,
+            largeurEnnemis: 50,
+        };
+        /**
+         *
+         * Les proprietés d'un ennemi
+         *
+         */
+        this.props = {
+            x: randomInt(0, window.innerWidth),
+            y: 0 - this.configuration.hauteurEnnemis,
+            top: null,
+            right: null,
+            bottom: null,
+            left: null,
+            speed: randomFloat(
+                this.configuration.vitesseMinimumEnnemis,
+                this.configuration.vitesseMaximumEnnemis
+            ),
+        };
     }
 
     render() {
@@ -33,7 +38,7 @@ class Enemy {
     }
 
     moveEnemy() {
-        this.props.y += this.props.speed;
+        this.props.y += this.props.speed * deltaTime;
         this.updateDimension();
     }
 
