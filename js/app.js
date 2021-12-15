@@ -9,16 +9,11 @@ context.imageSmoothingEnabled = false;
 // TODO : Faire une class que sera le parent de tout les elements du canvas : class GameObject() -> avec x/y/top/right/bottom/left/draw/update etc...
 // TODO : Faire une class qui gere les collisions (pour les missiles bonus etc...)
 // TODO : Régler le bug des enemies qui clignonent (hint : quand les enemies sortent de la map -> renderEnemies())
+// TODO : Attention au bug de performance des images (svg surtout)
 
 class Main {
     config = {
-        enemy: {
-            min: 3,
-            max: 8,
-            intervalMin: 300,
-            intervalMax: 800,
-        },
-        godmode: false,
+        godmode: true,
     };
 
     isStart = true;
@@ -35,7 +30,7 @@ class Main {
             })
         );
 
-        if (!this.godmode) {
+        if (!this.config.godmode) {
             this.EnemySpawner.checkSpaceshipCollideOnEnemy(() => {
                 this.isStart = false;
                 console.log('end');

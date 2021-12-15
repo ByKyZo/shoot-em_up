@@ -4,11 +4,10 @@ class EnemySpawner {
     config = {
         enemy: {
             min: 3,
-            max: 8,
-            intervalMin: 300,
+            max: 10,
+            intervalMin: 500,
             intervalMax: 800,
         },
-        godmode: false,
     };
     props = {
         enemyCooldownEnd: true,
