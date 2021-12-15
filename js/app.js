@@ -2,48 +2,96 @@ const canvas = document.querySelector('canvas');
 const home = document.querySelector('#home');
 const gameover = document.querySelector('#gameover');
 const context = canvas.getContext('2d');
+const scoreLayout = document.querySelector('#score-layout');
+const currentScore = document.querySelector('#current-score');
+const finalScore = document.querySelector('#final-score');
+const fps = document.querySelector('#fps');
+const btnPlay = document.querySelector('#play');
+const btnRestart = document.querySelector('#restart');
+const btnQuit = document.querySelector('#quit');
 context.imageSmoothingEnabled = false;
 
-// TODO : Gérer le delta time
-// TODO : Déclarer les attributs directement dans le constructor (verifie l'autocompletion dans les autres class)
-// TODO : Faire une class que sera le parent de tout les elements du canvas : class GameObject() -> avec x/y/top/right/bottom/left/draw/update etc...
-// TODO : Faire une class qui gere les collisions (pour les missiles bonus etc...)
-// TODO : Régler le bug des enemies qui clignonent (hint : quand les enemies sortent de la map -> renderEnemies())
-// TODO : Attention au bug de performance des images (svg surtout)
+let deltaTime = null;
+let currentFps = null;
 
 class Main {
-    config = {
-        godmode: true,
-    };
-
-    isStart = true;
-    score = 0;
-    spaceship = new Spaceship();
-    EnemySpawner = new EnemySpawner();
-
+    constructor() {
+        /**
+         *
+         * Configuration du jeu
+         *
+         */
+        this.configuration = {
+            modeInvincible: false,
+        };
+        /**
+         *
+         * Propriété du jeu
+         *
+         */
+        this.isStart = false;
+        this.score = 0;
+        this.spaceship = new Spaceship();
+        this.enemySpawner = new EnemySpawner();
+    }
+    /**
+     *
+     * Initialise le jeu
+     *  - Initialise le vaisseau
+     *  - Initialise l'apparation des ennemies
+     *
+     */
+    init() {
+        this.spaceship = new Spaceship(window.innerWidth / 2, window.innerHeight / 2);
+        this.enemySpawner = new EnemySpawner(this.spaceship);
+        this.spaceship.init();
+    }
+    /**
+     *
+     * Fait le rendu du jeu
+     *  - Dessine les missiles et les enemies
+     *  - Dans les fonctions de callback on verifie les collisions (optimisations des boucles)
+     *
+     */
     render() {
         this.spaceship.render();
+
         this.spaceship.drawMissile((missile, missileIndex) =>
-            this.EnemySpawner.checkMissileCollideOnEnemy(missile, missileIndex, () => {
-                this.score++;
-                console.log('score : ', this.score);
+            this.enemySpawner.checkMissileCollideOnEnemy(missile, missileIndex, () => {
+                this.incScore();
             })
         );
 
-        if (!this.config.godmode) {
-            this.EnemySpawner.checkSpaceshipCollideOnEnemy(() => {
+        if (!this.configuration.modeInvincible) {
+            this.enemySpawner.checkSpaceshipCollideOnEnemy(() => {
                 this.isStart = false;
                 console.log('end');
             });
         }
 
-        this.EnemySpawner.renderEnemies();
+        this.enemySpawner.renderEnemies();
     }
-
-    init() {
-        this.spaceship = new Spaceship(window.innerWidth / 2, window.innerHeight / 2);
-        this.EnemySpawner = new EnemySpawner(this.spaceship);
-        this.spaceship.init();
+    /**
+     *
+     * Incremente le score
+     *
+     */
+    incScore() {
+        this.score++;
+        currentScore.innerHTML = this.score;
+        finalScore.innerHTML = this.score;
+    }
+    /**
+     *
+     *  Reset
+     *
+     */
+    reset() {
+        this.score = 0;
+        currentScore.innerHTML = this.score;
+        finalScore.innerHTML = this.score;
+        this.spaceship.reset();
+        this.enemySpawner.reset();
     }
 }
 
@@ -54,28 +102,67 @@ const sprite = new Sprite();
 const background = sprite.getStars();
 
 const showHomePage = () => {
+    scoreLayout.style.display = 'none';
     canvas.style.display = 'none';
     home.style.display = 'flex';
     gameover.style.display = 'none';
 };
 const showGameoverPage = () => {
-    canvas.style.display = 'none';
+    scoreLayout.style.display = 'none';
+    canvas.style.display = 'flex';
     home.style.display = 'none';
     gameover.style.display = 'flex';
 };
 const showGamePage = () => {
+    scoreLayout.style.display = 'flex';
     canvas.style.display = 'flex';
     home.style.display = 'none';
     gameover.style.display = 'none';
 };
 
-// showHomePage();
+showHomePage();
+
+let isFirstGame = true;
+
+btnPlay.addEventListener('click', () => {
+    console.log('play');
+    showGamePage();
+    main.isStart = true;
+    isFirstGame = false;
+});
+
+btnRestart.addEventListener('click', () => {
+    console.log('restart');
+    showGamePage();
+    main.reset();
+    main.isStart = true;
+    isFirstGame = false;
+});
+
+btnQuit.addEventListener('click', () => {
+    console.log('quit');
+    showHomePage();
+    main.reset();
+    main.isStart = false;
+    isFirstGame = true;
+});
+
+setInterval(() => {
+    fps.innerHTML = currentFps;
+}, 1000);
+
+const clock = new Clock();
 
 const tick = () => {
     requestAnimationFrame(tick);
+
+    clock.start();
+
+    currentFps = clock.getFps();
+    deltaTime = clock.getDeltaTime();
+
     if (main.isStart) {
         context.clearRect(0, 0, window.innerWidth, window.innerHeight);
-
         context.drawImage(
             background.imgElement,
             0,
@@ -83,13 +170,13 @@ const tick = () => {
             background.width() * 20,
             background.height() * 20
         );
-        // context.drawImage(background.imgElement, 0, 0, window.innerWidth, window.innerHeight);
         main.render();
     } else {
-        // canvas.style.display = 'none';
-        // home.style.display = 'none';
-        // gameover.style.display = 'flex';
-        // console.log('end');
+        if (isFirstGame) {
+            showHomePage();
+        } else {
+            showGameoverPage();
+        }
     }
 };
 

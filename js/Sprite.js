@@ -26,7 +26,8 @@ class Sprite {
     };
 
     enemy = {
-        imgElement: document.querySelector('#enemy-spritesheet'),
+        // imgElement: document.querySelector('#enemy-spritesheet'),
+        imgElement: null,
         width: function () {
             return this.imgElement.width;
         },
@@ -53,6 +54,10 @@ class Sprite {
             return this.imgElement.height;
         },
     };
+
+    constructor() {
+        this.enemy.imgElement = document.querySelector('#enemy-spritesheet');
+    }
 
     getSpaceshipSprite() {
         return this.spaceship;
