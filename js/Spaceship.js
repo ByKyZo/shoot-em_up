@@ -13,6 +13,8 @@ class Spaceship {
             debug: false,
             largeurDesMissiles: 12,
             hauteurDesMissiles: 24,
+            largeurVaisseau: 100,
+            hauteurVaisseau: 100,
         };
         /**
          *
@@ -35,8 +37,8 @@ class Spaceship {
             right: null,
             bottom: null,
             left: null,
-            width: 100,
-            height: 100,
+            // width: 100,
+            // height: 100,
             missiles: [],
             currentFireCooldown: 0,
         };
@@ -79,10 +81,10 @@ class Spaceship {
     stateHandler() {
         const checkCollisionTopY = this.props.y - this.configuration.vitesseVaisseau > 0;
         const checkCollisionRightX =
-            this.props.x + this.configuration.vitesseVaisseau + this.props.width <
+            this.props.x + this.configuration.vitesseVaisseau + this.configuration.largeurVaisseau <
             window.innerWidth;
         const checkCollisionBottomY =
-            this.props.y + this.configuration.vitesseVaisseau + this.props.height <
+            this.props.y + this.configuration.vitesseVaisseau + this.configuration.hauteurVaisseau <
             window.innerHeight;
         const checkCollisionLeftX = this.props.x - this.configuration.vitesseVaisseau > 0;
 
@@ -130,8 +132,8 @@ class Spaceship {
 
     updateDimension() {
         this.props.top = this.props.y;
-        this.props.right = this.props.x + this.props.width;
-        this.props.bottom = this.props.y + this.props.height;
+        this.props.right = this.props.x + this.configuration.largeurVaisseau;
+        this.props.bottom = this.props.y + this.configuration.hauteurVaisseau;
         this.props.left = this.props.x;
     }
 
@@ -150,8 +152,8 @@ class Spaceship {
             spaceshipSprite.imgElement,
             this.props.x,
             this.props.y,
-            this.props.width,
-            this.props.height
+            this.configuration.largeurVaisseau,
+            this.configuration.hauteurVaisseau
             // spaceshipSprite.width(),
             // spaceshipSprite.height()
         );
@@ -159,7 +161,9 @@ class Spaceship {
         if (this.configuration.debug) {
             context.fillStyle = '#00ff0050';
             context.fillRect(
-                this.props.x + this.props.width / 2 - this.configuration.largeurDesMissiles / 2,
+                this.props.x +
+                    this.configuration.largeurVaisseau / 2 -
+                    this.configuration.largeurDesMissiles / 2,
                 this.props.y - window.innerHeight,
                 this.configuration.largeurDesMissiles,
                 window.innerHeight
@@ -178,7 +182,9 @@ class Spaceship {
     makeMissile() {
         if (this.state.isFireCooldownEnd) {
             const missileX =
-                this.props.x + this.props.width / 2 - this.configuration.largeurDesMissiles / 2;
+                this.props.x +
+                this.configuration.largeurVaisseau / 2 -
+                this.configuration.largeurDesMissiles / 2;
             const missileY = this.props.y - this.configuration.hauteurDesMissiles;
 
             this.props.missiles.push({

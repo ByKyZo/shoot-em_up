@@ -9,8 +9,10 @@ class Enemy {
          *
          */
         this.configuration = {
-            vitesseMinimumEnnemis: 0.06,
-            vitesseMaximumEnnemis: 0.08,
+            vitesseMinimumEnnemis: 0.09,
+            vitesseMaximumEnnemis: 0.13,
+            // hauteurEnnemis: 50,
+            // largeurEnnemis: 50,
             hauteurEnnemis: 50,
             largeurEnnemis: 50,
         };
@@ -22,6 +24,8 @@ class Enemy {
         this.props = {
             x: randomInt(0, window.innerWidth),
             y: 0 - this.configuration.hauteurEnnemis,
+            // mooveHorizontal: false,
+            long: 0,
             top: null,
             right: null,
             bottom: null,
@@ -39,6 +43,15 @@ class Enemy {
 
     moveEnemy() {
         this.props.y += this.props.speed * deltaTime;
+
+        // this.props.long += this.props.speed * deltaTime;
+        // const cos = Math.cos(this.props.long * 0.01) * 0.8;
+        // this.props.x += cos;
+
+        // const sin = Math.cos(this.props.long * 0.01) * 0.8;
+
+        // this.props.y += this.props.speed * deltaTime + sin;
+
         this.updateDimension();
     }
 

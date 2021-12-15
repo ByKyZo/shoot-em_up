@@ -13,8 +13,6 @@ class EnemySpawner {
         this.configuration = {
             nombreApparitionEnnemisMinimum: 4,
             nombreApparitionEnnemisMaximum: 8,
-            // nombreApparitionEnnemisMinimum: 300,
-            // nombreApparitionEnnemisMaximum: 400,
             intervalleApparitionMinimum: 800,
             intervalleApparitionMaximum: 1000,
         };

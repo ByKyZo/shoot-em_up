@@ -1,7 +1,7 @@
 class Sprite {
     // TODO : remove les images du DOM apres le querySelector
     spaceship = {
-        imgElement: document.querySelector('#ship-spritesheet'),
+        imgElement: document.querySelector('#spaceship'),
         width: function () {
             return this.imgElement.width;
         },
@@ -11,12 +11,7 @@ class Sprite {
     };
 
     missile = {
-        imgElement: document.querySelector('#missile-spritesheet'),
-        // imgElement: () => {
-        //     const imgElement = document.querySelector('#missile-spritesheet');
-        //     imgElement.remove();
-        //     return imgElement;
-        // },
+        imgElement: document.querySelector('#missile'),
         width: function () {
             return this.imgElement.width;
         },
@@ -26,8 +21,7 @@ class Sprite {
     };
 
     enemy = {
-        // imgElement: document.querySelector('#enemy-spritesheet'),
-        imgElement: null,
+        imgElement: document.querySelector('#enemy'),
         width: function () {
             return this.imgElement.width;
         },
@@ -45,19 +39,8 @@ class Sprite {
             return this.imgElement.height;
         },
     };
-    stars = {
-        imgElement: document.querySelector('#stars'),
-        width: function () {
-            return this.imgElement.width;
-        },
-        height: function () {
-            return this.imgElement.height;
-        },
-    };
 
-    constructor() {
-        this.enemy.imgElement = document.querySelector('#enemy-spritesheet');
-    }
+    constructor() {}
 
     getSpaceshipSprite() {
         return this.spaceship;
@@ -73,8 +56,5 @@ class Sprite {
 
     getBackground() {
         return this.background;
-    }
-    getStars() {
-        return this.stars;
     }
 }

@@ -14,6 +14,9 @@ context.imageSmoothingEnabled = false;
 let deltaTime = null;
 let currentFps = null;
 
+// TODO : Faire bouger les ennemies de droite a gauche
+// TODO : Mettre la width / height dans config
+
 class Main {
     constructor() {
         /**
@@ -99,7 +102,7 @@ const main = new Main();
 main.init();
 
 const sprite = new Sprite();
-const background = sprite.getStars();
+const background = sprite.getBackground();
 
 const showHomePage = () => {
     scoreLayout.style.display = 'none';
