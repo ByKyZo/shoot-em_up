@@ -11,8 +11,6 @@ class Enemy {
         this.configuration = {
             vitesseMinimumEnnemis: 0.09,
             vitesseMaximumEnnemis: 0.13,
-            // hauteurEnnemis: 50,
-            // largeurEnnemis: 50,
             hauteurEnnemis: 50,
             largeurEnnemis: 50,
         };
