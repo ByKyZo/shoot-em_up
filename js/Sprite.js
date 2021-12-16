@@ -1,46 +1,46 @@
 class Sprite {
     // TODO : remove les images du DOM apres le querySelector
-    spaceship = {
-        imgElement: document.querySelector('#spaceship'),
-        width: function () {
-            return this.imgElement.width;
-        },
-        height: function () {
-            return this.imgElement.height;
-        },
-    };
+    constructor() {
+        this.spaceship = {
+            imgElement: document.querySelector('#spaceship'),
+            width: function () {
+                return this.imgElement.width;
+            },
+            height: function () {
+                return this.imgElement.height;
+            },
+        };
 
-    missile = {
-        imgElement: document.querySelector('#missile'),
-        width: function () {
-            return this.imgElement.width;
-        },
-        height: function () {
-            return this.imgElement.height;
-        },
-    };
+        this.missile = {
+            imgElement: document.querySelector('#missile'),
+            width: function () {
+                return this.imgElement.width;
+            },
+            height: function () {
+                return this.imgElement.height;
+            },
+        };
 
-    enemy = {
-        imgElement: document.querySelector('#enemy'),
-        width: function () {
-            return this.imgElement.width;
-        },
-        height: function () {
-            return this.imgElement.height;
-        },
-    };
+        this.enemy = {
+            imgElement: document.querySelector('#enemy'),
+            width: function () {
+                return this.imgElement.width;
+            },
+            height: function () {
+                return this.imgElement.height;
+            },
+        };
 
-    background = {
-        imgElement: document.querySelector('#background'),
-        width: function () {
-            return this.imgElement.width;
-        },
-        height: function () {
-            return this.imgElement.height;
-        },
-    };
-
-    constructor() {}
+        this.background = {
+            imgElement: document.querySelector('#background'),
+            width: function () {
+                return this.imgElement.width;
+            },
+            height: function () {
+                return this.imgElement.height;
+            },
+        };
+    }
 
     getSpaceshipSprite() {
         return this.spaceship;
