@@ -37,8 +37,6 @@ class Spaceship {
             right: null,
             bottom: null,
             left: null,
-            // width: 100,
-            // height: 100,
             missiles: [],
             currentFireCooldown: 0,
         };
@@ -105,11 +103,21 @@ class Spaceship {
         }
         this.updateDimension();
     }
-
+    /**
+     *
+     * Gere les actions définis sur les touches
+     *
+     */
     handleListener() {
         // todo : remove les events
         const handleState = (e) => {
             const value = e.type === 'keydown';
+            console.log('click');
+            /**
+             *
+             * C'est ici qu'on gere les différentes touches
+             *
+             */
             if (e.key === 'ArrowUp') {
                 this.state.isMoveTop = value;
             }
